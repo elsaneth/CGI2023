@@ -9,6 +9,7 @@ import { Book } from '../../models/book';
   templateUrl: './books-list.component.html',
   styleUrls: ['./books-list.component.scss']
 })
+
 export class BooksListComponent implements OnInit {
 
   books$!: Observable<Page<Book>>;
@@ -21,7 +22,6 @@ export class BooksListComponent implements OnInit {
   ngOnInit(): void {
     // TODO this observable should emit books taking into consideration pagination, sorting and filtering options.
     this.books$ = this.bookService.getBooks({});
-
+    this.books$.subscribe(data => console.log('Books data:', data));
   }
-
 }

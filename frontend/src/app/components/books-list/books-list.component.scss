@@ -2,3 +2,35 @@
   max-width: 1024px;
   margin: 2em auto;
 }
+
+.table{
+  text-align: center;
+}
+
+.td {
+  padding: 50px;
+  text-align: center;
+}
+
+.th {
+  padding: 50px;
+  text-align: center;
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: limegreen;
+  border-radius: 25px;
+  width: 80%;
+  height: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.background-orange {
+  background-color: #f6ab2c;
+}
