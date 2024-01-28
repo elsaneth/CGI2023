@@ -25,3 +25,4 @@ export class BooksListComponent implements OnInit {
     this.books$.subscribe(data => console.log('Books data:', data));
   }
 }
+
