@@ -17,8 +17,10 @@ public class CheckOutController {
     @Autowired
     private CheckOutService checkOutService;
 
+    // http://localhost:8080/api/checkout/getCheckouts?page=0&size=3&sort=checkedOutDate&direction=DESC
     @GetMapping(value = "getCheckouts")
     public ResponseEntity<Page<CheckOutDTO>> getCheckOuts(Pageable pageable) {
+        System.out.println("Pageable object: " + pageable);
         return ResponseEntity.ok(checkOutService.getCheckOuts(pageable));
     }
 
