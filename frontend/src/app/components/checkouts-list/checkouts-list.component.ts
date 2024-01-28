@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 import {Page, PageRequest} from "../../models/page";
 import {Checkout} from "../../models/checkout";
 import {CheckoutService} from "../../services/checkout.service";
 import {PageEvent} from "@angular/material/paginator";
-import {MatSort, Sort} from "@angular/material/sort";
+import {Sort} from "@angular/material/sort";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-checkouts-list',
@@ -13,14 +14,15 @@ import {MatSort, Sort} from "@angular/material/sort";
 })
 
 export class CheckoutsListComponent implements OnInit {
-
-  @ViewChild(MatSort) sort = new MatSort();
-
   checkouts$!: Observable<Page<Checkout>>
+  dataSource!: MatTableDataSource<any>
 
-  pageIndex: number = 0
-
-  pageSize: number = 10
+  pageRequest: PageRequest = {
+    pageIndex: 0,
+    pageSize: 10,
+    sort: "dueDate",
+    direction: "asc"
+  }
 
   constructor(
     private checkOutService: CheckoutService,
@@ -28,32 +30,25 @@ export class CheckoutsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Sort: ", this.sort);
     this.loadCheckouts()
   }
 
   onPageChange(event: PageEvent): void {
-    this.pageSize = event.pageSize
-    this.pageIndex = event.pageIndex
-    console.log("Page event: ", event);
+    this.pageRequest.pageSize = event.pageSize
+    this.pageRequest.pageIndex = event.pageIndex
     this.loadCheckouts();
   }
 
-  // onSortChange(event: Sort): void {
-  //   this.sort.active = event.active
-  //   this.sort.direction = event.direction
-  //   console.log(this.sort);
-  //   this.loadCheckouts()
-  // }
+  onSortChange(event: Sort): void {
+    this.pageRequest.sort = event.active
+    this.pageRequest.direction = event.direction
+    this.loadCheckouts()
+  }
 
   loadCheckouts(): void {
-    const pageFilter: PageRequest = {
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-      sort: this.sort.active,
-      direction: this.sort.direction
-    }
-    this.checkouts$ = this.checkOutService.getCheckouts(pageFilter)
-    this.checkouts$.subscribe(data => console.log('Checkouts data: ', data));
+    this.checkouts$ = this.checkOutService.getCheckouts(this.pageRequest)
+    this.checkouts$.subscribe(data => {
+      this.dataSource = new MatTableDataSource<any>(data.content)
+    });
   }
 }
