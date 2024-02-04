@@ -3,7 +3,6 @@
     <mat-card-title>CHECKOUTS</mat-card-title>
     <mat-card-content>
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" matSortActive="dueDate" matSortDirection="asc" matSortDisableClear>
-<!--          <table mat-table [dataSource]="checkouts.content" matSort class="table">-->
 
           <ng-container matColumnDef="borrowedBook.title">
             <th mat-header-cell *matHeaderCellDef mat-sort-header="borrowedBook.title">BOOK</th>
