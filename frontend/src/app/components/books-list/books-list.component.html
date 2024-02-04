@@ -24,6 +24,13 @@
           <tr mat-row *matRowDef="let row; columns: ['title', 'author', 'status']"></tr>
         </table>
       </mat-nav-list>
+      <mat-paginator
+        [length]="(books$ | async)?.totalElements"
+        [pageIndex]="pageRequest.pageIndex"
+        [pageSize]="pageRequest.pageSize"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)">
+      </mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>
