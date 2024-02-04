@@ -22,7 +22,7 @@ export class BooksListComponent implements OnInit {
   pageRequest: PageRequest = {
     pageIndex: 0,
     pageSize: 10,
-    sort: "dueDate",
+    sort: "title",
     direction: "asc"
   }
 
@@ -32,23 +32,21 @@ export class BooksListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // TODO this observable should emit books taking into consideration pagination, sorting and filtering options.
-    this.books$ = this.bookService.getBooks({});
-    this.books$.subscribe(data => console.log('Books data:', data));
+    this.loadBooks()
   }
 
   onPageChange(event: PageEvent): void {
     this.pageRequest.pageSize = event.pageSize
     this.pageRequest.pageIndex = event.pageIndex
-    this.loadCheckouts();
+    this.loadBooks();
   }
   onSortChange(event: Sort): void {
     this.pageRequest.sort = event.active
     this.pageRequest.direction = event.direction
-    this.loadCheckouts()
+    this.loadBooks()
   }
 
-  loadCheckouts(): void {
+  loadBooks(): void {
     this.books$ = this.bookService.getBooks(this.pageRequest)
     this.books$.subscribe(data => {
       this.dataSource = new MatTableDataSource<any>(data.content)
