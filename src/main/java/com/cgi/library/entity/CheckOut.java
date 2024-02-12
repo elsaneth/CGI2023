@@ -1,5 +1,6 @@
 package com.cgi.library.entity;
 
+import com.cgi.library.model.BookStatus;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,16 @@ public class CheckOut {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Book borrowedBook;
+
+    @PrePersist
+    @PreUpdate
+    public void updateBookStatus() {
+        if (borrowedBook != null && borrowedBook.getStatus() == BookStatus.AVAILABLE) {
+            borrowedBook.setStatus(BookStatus.BORROWED);
+        } else if (borrowedBook != null && borrowedBook.getStatus() == BookStatus.BORROWED) {
+            borrowedBook.setStatus(BookStatus.AVAILABLE);
+        }
+    }
 
     @Column(name = "checked_out_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
