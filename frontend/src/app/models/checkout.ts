@@ -12,4 +12,6 @@ export interface Checkout {
   checkedOutDate: string;
 
   dueDate: string;
+
+  returnedDate?: string;
 }
