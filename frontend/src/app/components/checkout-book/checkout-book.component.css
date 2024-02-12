@@ -1,0 +1,23 @@
+/* styles.css */
+
+.main-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust this based on your layout requirements */
+}
+
+.input-spacing {
+  margin-bottom: 16px;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.card-title {
+  text-align: center;
+}
+

@@ -1,0 +1,26 @@
+<div class="main-div">
+  <mat-card>
+    <mat-card-title class="card-title">CHECKOUT BOOK</mat-card-title>
+    <mat-card-content>
+      <ul>
+        <li><strong>Title:</strong> {{ (book$ | async)?.title }}</li>
+        <li><strong>Author:</strong> {{ (book$ | async)?.author }}</li>
+        <li><strong>Today's date:</strong> {{ currentDate }}</li>
+        <li><strong>Due date:</strong> {{ (book$ | async)?.dueDate ? (book$ | async)?.dueDate : dueDate }}</li>
+      </ul>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+        <input matInput placeholder="First Name" formControlName="borrowerFirstName">
+
+        <div class="input-spacing"></div>
+
+        <input matInput placeholder="Last Name" formControlName="borrowerLastName">
+
+        <div class="button-container">
+          <button mat-button color="primary" *ngIf="(book$ | async)?.status == 'AVAILABLE'">Checkout</button>
+          <button mat-button color="primary" *ngIf="(book$ | async)?.status == 'BORROWED'">Return</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
