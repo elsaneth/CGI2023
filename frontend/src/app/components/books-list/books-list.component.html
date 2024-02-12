@@ -19,8 +19,16 @@
           <td mat-cell *matCellDef="let book" class="status-cell" [ngClass]="{'background-orange': book.status == 'BORROWED'}">{{book.status}}</td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['title', 'author', 'status']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['title', 'author', 'status']"></tr>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>ACTION</th>
+          <td mat-cell *matCellDef="let book">
+            <button mat-raised-button color="primary" *ngIf="book.status == 'AVAILABLE'" [routerLink]="['/books', book.id, 'checkout']">Check Out</button>
+            <button mat-raised-button color="primary" *ngIf="book.status == 'BORROWED'" [routerLink]="['/books', book.id, 'checkout']">Return</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['title', 'author', 'status', 'action']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['title', 'author', 'status', 'action']"></tr>
       </table>
       <mat-paginator
         [length]="(books$ | async)?.totalElements"
