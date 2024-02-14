@@ -32,6 +32,7 @@ public class CheckOut {
     public void updateBookStatus() {
         if (borrowedBook != null && borrowedBook.getStatus() == BookStatus.AVAILABLE) {
             borrowedBook.setStatus(BookStatus.BORROWED);
+            borrowedBook.setCheckOutCount(borrowedBook.getCheckOutCount() + 1);
         } else if (borrowedBook != null && borrowedBook.getStatus() == BookStatus.BORROWED) {
             borrowedBook.setStatus(BookStatus.AVAILABLE);
         }
