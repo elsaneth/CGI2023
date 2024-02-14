@@ -12,6 +12,7 @@ import {CheckoutService} from "../../services/checkout.service";
 import {v4 as uuidv4} from 'uuid';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from 'rxjs/operators';
+import {ReturnBook} from "../../models/returnBook";
 
 @Component({
   selector: 'app-checkout-book',
@@ -24,6 +25,8 @@ export class CheckoutBookComponent implements OnInit {
   dueDate: string | null | undefined;
   currentDate: string | null;
   checkoutForm: FormGroup;
+
+  checkout$!: Observable<Checkout>;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,11 +51,17 @@ export class CheckoutBookComponent implements OnInit {
     this.book$ = this.route.params
       .pipe(map(params => params['id']))
       .pipe(switchMap(id => this.bookService.getBook(id)))
+    this.checkout$ = this.route.params
+      .pipe(map(params => params['id']))
+      .pipe(switchMap(id => this.checkoutService.getCheckout(id)))
   }
 
   onSubmit() {
     this.book$.subscribe(bookData => {
       if (bookData.status === 'AVAILABLE') {
+        this.book$ = this.route.params
+          .pipe(map(params => params['id']))
+          .pipe(switchMap(id => this.bookService.getBook(id)))
         this.onCheckout();
       } else if (bookData.status === 'BORROWED') {
         this.onReturn();
@@ -64,11 +73,6 @@ export class CheckoutBookComponent implements OnInit {
     if (this.checkoutForm.valid) {
       const {borrowerFirstName, borrowerLastName} = this.checkoutForm.value;
       this.book$.subscribe(bookData => {
-        // if (bookData.status != "AVAILABLE") {
-        //   this.showResultMessage('Sorry, this book is not available', 'X', 7000);
-        //   return;
-        // }
-        bookData.status = "BORROWED";
         const newCheckout: Checkout = {
           id: uuidv4(),
           borrowerFirstName,
@@ -96,11 +100,20 @@ export class CheckoutBookComponent implements OnInit {
     }
   }
 
-
   onReturn() {
     if (this.checkoutForm.valid) {
       const {borrowerFirstName, borrowerLastName} = this.checkoutForm.value;
-
+      this.book$.subscribe(bookData => {
+        const newReturn: ReturnBook = {
+          bookId: bookData.id,
+          firstName: borrowerFirstName,
+          lastName: borrowerLastName,
+          returnDate: this.currentDate
+        }
+        this.checkoutService.returnBook(newReturn).subscribe(resp => {
+          console.log("Return book response: ", resp)
+        });
+      });
     }
   }
 

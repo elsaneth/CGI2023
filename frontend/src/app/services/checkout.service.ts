@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import {RestUtil} from "./rest-util";
 import { Checkout } from '../models/checkout';
 import {Book} from "../models/book";
+import {ReturnBook} from "../models/returnBook";
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,13 @@ export class CheckoutService {
     const url = this.baseUrl + '/checkout';
     return this.http.post<void>(url, checkout);
   }
+
+  returnBook(returnBook: ReturnBook): Observable<void> {
+    const url = this.baseUrl + '/return';
+    return this.http.post<void>(url, returnBook);
+  }
+
+
 
   getCheckout(checkoutId: string): Observable<Checkout> {
     const url = this.baseUrl + '/getCheckout';
