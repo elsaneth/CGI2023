@@ -13,7 +13,6 @@ import { map, switchMap } from 'rxjs/operators';
 export class BookDetailComponent implements OnInit {
   book$!: Observable<Book>;
 
-
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
